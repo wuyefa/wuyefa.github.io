@@ -1,118 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>第一presentation</title>
-      <link href="/2022/03/13/%E7%AC%AC%E4%B8%80presentation/"/>
-      <url>/2022/03/13/%E7%AC%AC%E4%B8%80presentation/</url>
-      
-        <content type="html"><![CDATA[<p><img src="/.com//20210711155449249.png" alt="20210711155449249"></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>presentation</title>
-      <link href="/2022/03/13/presentation/"/>
-      <url>/2022/03/13/presentation/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>hexo搭建博客方法及注意事项</title>
-      <link href="/2022/03/12/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%96%B9%E6%B3%95%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
-      <url>/2022/03/12/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%96%B9%E6%B3%95%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>简历</title>
-      <link href="/2022/03/12/%E7%AE%80%E5%8E%86/"/>
-      <url>/2022/03/12/%E7%AE%80%E5%8E%86/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 个人简历 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>学习</title>
-      <link href="/2022/03/12/%E5%AD%A6%E4%B9%A0/"/>
-      <url>/2022/03/12/%E5%AD%A6%E4%B9%A0/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 深度学习 </tag>
-            
-            <tag> test </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>test</title>
-      <link href="/2022/03/11/test/"/>
-      <url>/2022/03/11/test/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 闲散日记 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2022/03/11/hello-world/"/>
-      <url>/2022/03/11/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><span id="more"></span><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-  
-  
+<search>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/03/11/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<span id="more"></span>
+
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>解决hexo3.0以上版本无法直接显示插入的图片的问题</title>
+    <url>/2022/03/13/%E8%A7%A3%E5%86%B3hexo3-0%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E6%97%A0%E6%B3%95%E7%9B%B4%E6%8E%A5%E6%98%BE%E7%A4%BA%E6%8F%92%E5%85%A5%E7%9A%84%E5%9B%BE%E7%89%87%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>hexo选择3.0以上版本，通过常规md文件的编写方式无法在网页中显示图片。</p>
+<h1 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h1><p>在博客根目录下用命令行：<strong>hexo3.0及以上版本一定要用该指令进行安装！！！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/7ym0n/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
+
+<p>该指令是指安装<strong>修改后</strong>的hexo-asset-image，可适用于hexo3.0及以上版本。</p>
+<p>网上的教程多数是使用如下命令进行安装，<strong>在hexo3.0版本下是错误的！！！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/hexo-asset-image --save  # hexo3.0以上版本不要用这条语句</span><br></pre></td></tr></table></figure>
+
+<p>然后在博客根目录下的_config.yml文件中将“post_asset_folder:”设置为”true“，这样在通过指令hexo new “文章标题”时，不仅会创建一个md文件，还会创建一个和md文件同名的文件夹。将md文件中将要用到的图片存储在这个文件夹下，在需要使用的时候在md文件中通过：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% asset<span class="emphasis">_img sky2.jpg This is an test image %&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>来插入图片。其中sky2.jpg就是你要引用的图片，我这里就是sky2.jpg，后面的This is an test image是图片描述，可以自己修改。</p>
+<h1 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h1><ol>
+<li>一定要事先搞清楚自己hexo的版本，否则装上了也不一定是对的。</li>
+<li>使用指令安装asset的时候可能会非常慢，可以尝试链接vpn或者使用cnmp指令进行安装，或者耐心等一等，网上方法太多了，没啥用。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>博客搭建</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+        <tag>博客搭建</tag>
+        <tag>问题解决</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一presentation</title>
+    <url>/2022/03/13/%E7%AC%AC%E4%B8%80presentation/</url>
+    <content><![CDATA[ <meta name="referrer" content="no-referrer">
+
+<img src="/2022/03/13/%E7%AC%AC%E4%B8%80presentation/20210711155449249.png" class width="111">
+
+<p><img src="/./%E7%AC%AC%E4%B8%80presentation/20210711155449249.png" alt="20210711155449249"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>presentation</title>
+    <url>/2022/03/13/presentation/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>hexo搭建博客方法及注意事项</title>
+    <url>/2022/03/12/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%96%B9%E6%B3%95%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>简历</title>
+    <url>/2022/03/12/%E7%AE%80%E5%8E%86/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>个人简历</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习</title>
+    <url>/2022/03/12/%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>test</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>test</title>
+    <url>/2022/03/11/test/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>闲散日记</tag>
+      </tags>
+  </entry>
 </search>
