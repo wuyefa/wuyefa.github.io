@@ -1,296 +1,261 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>深度学习计算</title>
-      <link href="/2022/03/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97/"/>
-      <url>/2022/03/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97/</url>
-      
-        <content type="html"><![CDATA[<h2 id="F-Relu和nn-Relu的区别："><a href="#F-Relu和nn-Relu的区别：" class="headerlink" title="F.Relu和nn.Relu的区别："></a>F.Relu和nn.Relu的区别：</h2><p>F.relu是作为一个函数去计算relu，使用方法为：F.relu(X)</p><p>nn.Relu是作为一个层结构，必须添加到nn.Module容器内才能使用。</p><p>从嵌套块中收集参数：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">block1</span>():</span><br><span class="line">    <span class="keyword">return</span> nn.Sequential(nn.Linear(<span class="number">4</span>, <span class="number">8</span>), nn.ReLU(),</span><br><span class="line">                         nn.Linear(<span class="number">8</span>, <span class="number">4</span>), nn.ReLU())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">block2</span>():</span><br><span class="line">    net = nn.Sequential()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        <span class="comment"># 在这里嵌套</span></span><br><span class="line">        net.add_module(<span class="string">f&#x27;block <span class="subst">&#123;i&#125;</span>&#x27;</span>, block1())</span><br><span class="line">    <span class="keyword">return</span> net</span><br><span class="line"></span><br><span class="line">rgnet = nn.Sequential(block2(), nn.Linear(<span class="number">4</span>, <span class="number">1</span>))</span><br><span class="line">rgnet(X)</span><br><span class="line"><span class="built_in">print</span>(rgnet)</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
+<search>
+  <entry>
+    <title>6_2图像卷积疑问及解答</title>
+    <url>/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/</url>
+    <content><![CDATA[<h2 id="问题1：卷积是什么？"><a href="#问题1：卷积是什么？" class="headerlink" title="问题1：卷积是什么？"></a>问题1：卷积是什么？</h2><h2 id="解答1：小明吃饭"><a href="#解答1：小明吃饭" class="headerlink" title="解答1：小明吃饭"></a>解答1：小明吃饭</h2><p>举例说明，有个小明一天到晚在吃东西，时间和他吃下去的东西的函数图像如下图所示：</p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314151338739.png" class title="进食函数">
+
+<p>他消化的速率如下图所示：</p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314151455298.png" class title="消化比例函数">
+
+<p>卷积的公式为：<br>$$<br>\int_{+\infty}^{-\infty}{f(Z)g(X-Z)dZ}<br>$$<br>用f函数表示进食,g函数表示消化,带入到卷积公式之中.注意,g函数表示的是消化后剩余食物所占的比例.</p>
+<p>这里要表现的东西其实用一根线将f函数和g函数联系了起来.</p>
+<p><strong>一个系统输入不稳定(对应f函数),但是输出稳定(对应g函数),可以用卷积来求系统存量.</strong></p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314154543887.png" class title="卷积计算本质">
+
+<p>讲其对应到可视化图像上,其实就是讲g函数翻转了一下和f函数对应相乘,因为翻转了,所以对应叫做卷积.</p>
+<h2 id="问题2-如何将卷积公式与计算机图像处理对应起来"><a href="#问题2-如何将卷积公式与计算机图像处理对应起来" class="headerlink" title="问题2:如何将卷积公式与计算机图像处理对应起来"></a>问题2:如何将卷积公式与计算机图像处理对应起来</h2><h2 id="解答2"><a href="#解答2" class="headerlink" title="解答2:"></a>解答2:</h2><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314155110999.png" class title="图片卷积计算">
+
+<p>上图为计算机对图片进行卷积处理的解释,和前面的卷积公式有一对应结构:<strong>先相乘再相加</strong>,然后得到一个新的像素值.</p>
+<p>但是这么做会导致图像少一圈像素,那么就在原图像的外围加一圈0的像素点,如下图所示:这样就能得到同样大小的图片</p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314155317812.png" class title="保持原本图片大小的卷积操作">
+
+<p>图像对应卷积公式中的f函数,卷积核对应g函数,这里与吃东西不同之处在于这里是一个二维的问题.</p>
+<h2 id="问题3-如何理解卷积本质"><a href="#问题3-如何理解卷积本质" class="headerlink" title="问题3:如何理解卷积本质?"></a>问题3:如何理解卷积本质?</h2><h2 id="解答3"><a href="#解答3" class="headerlink" title="解答3:"></a>解答3:</h2><p>在一个时间段上,会随机的发生很多件事情,这些事情是无法预测的随机的输出,同时每一件事情都可能会对后面的事情产生一定的影响,这个影响会随着时间的变化而变化,其函数对应g函数.注意,这里的<strong>g函数可以随意变化</strong>,<strong>横坐标不一定时间</strong>,函数图线不一定是递减,</p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314160000048.png" class title="蝴蝶对龙卷风的影响">
+
+<p>举例说明:在某一个时刻,发生了一件事,这件事会受到之前发生的很多事情的影响,这个影响还会随着时间的改变而改变,这个改变的规律的函数就是g函数.</p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314160208422.png" class title="平滑卷积核">
+
+<p>这里g函数所做的操作就是求了一个平均,这里g函数是一个3 * 3的卷积核,就是**表达的是一个像素点周围的一圈像素点对其产生的影响.**还会有5 * 5等多种大小规模的卷积核.</p>
+<p><strong>卷积核的规模大小对应的是能够影响中心点的周边的点的范围,卷积核每一个小格里的函数对应的是周边点对中心点影响的g函数.</strong></p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314160911035.png" class title="卷积计算">
+
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314161343403.png" class title="卷积计算">
+
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314161439482.png" class title="卷积计算">
+
+<p>注意,这里需要将相应的矩阵进行180°翻转才能转化成一一对应的关系.</p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314161555941.png" class title="卷积核本质">
+
+<p>这就说明g函数不等于卷积核,需要讲g函数的矩阵顺时针翻转180°才是卷积核.卷积核可以直接扣在图像上进行相乘再相加.</p>
+<ol>
+<li>过去对现在的影响就相当于周围像素点对中间像素点的影响;</li>
+<li>g函数规定了如何影响;</li>
+</ol>
+<h2 id="问题4-卷积神经网络"><a href="#问题4-卷积神经网络" class="headerlink" title="问题4:卷积神经网络"></a>问题4:卷积神经网络</h2><p>卷积神经网络第一步:将图像的局部特征提取出来,讲这些局部特征交给神经网络.</p>
+<p>如何提取局部特征?就是对图像进行卷积操作.这里与之前理解的卷积的操作的结果有不同之处,该如何理解?</p>
+<h2 id="解答4"><a href="#解答4" class="headerlink" title="解答4:"></a>解答4:</h2><p>因为卷积核有很多种,不止有平滑卷积核.</p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314162235332.png" class title="卷积用于特征提取">
+
+<p>上面的两个卷积核,第一个卷积核讲垂直方向的边界挑选了出来(垂直边界过滤器),下面的将水平方向的边界挑选了出来(水平边界过滤器).</p>
+<p>也就是说,只要卷积核应用合理,就能将图片中特定的特征提取出来,别的东西过滤掉.</p>
+<img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314162633975.png" class title="多层卷积进行特征提取">
+
+<p>上图所示三个卷积核分别就是提取三个唯独的特征信息.</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h2><ol>
+<li>不稳定输入,稳定输出,求系统存量;</li>
+<li>周围像素点如何对中心像素点产生影响;</li>
+<li>作为过滤器,提取图片特征信息.,也就是指中心像素点如何试探周围的像素点,如何筛选图像特征.</li>
+</ol>
+<p><a href="https://www.bilibili.com/video/BV1VV411478E?from=search&seid=1725700777641154181">参考来源:B站up主王木头学科学:从“卷积”、到“图像卷积操作”、再到“卷积神经网络”，“卷积”意义的3次改变</a></p>
+<p><a href="https://www.bilibili.com/video/BV1L64y1m7Nh?spm_id_from=333.999.0.0">参考来源:B站up主跟李沐学AI:19 卷积层【动手学深度学习v2】</a></p>
+]]></content>
       <categories>
-          
-          <category> 深度学习笔记 </category>
-          
-          <category> 工程能力提升 </category>
-          
+        <category>深度学习笔记</category>
+        <category>关键知识点答疑总结</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 跟李沐学AI </tag>
-            
-            <tag> 动手学深度学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>李沐都d2l库代码纠错</title>
-      <link href="/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/"/>
-      <url>/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/</url>
-      
-        <content type="html"><![CDATA[<h2 id="torch-py中的train-epoch-ch3函数"><a href="#torch-py中的train-epoch-ch3函数" class="headerlink" title="torch.py中的train_epoch_ch3函数:"></a>torch.py中的train_epoch_ch3函数:</h2><p>将273行和第275行的l后面加上mean()</p><img src="/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/Users\64871\AppData\Roaming\Typora\typora-user-images\image-20220324082242952.png" alt="image-20220324082242952"><h2 id="torch-py中的class-Animator-动态绘图部分"><a href="#torch-py中的class-Animator-动态绘图部分" class="headerlink" title="torch.py中的class Animator(动态绘图部分):"></a>torch.py中的class Animator(动态绘图部分):</h2><p>在其add函数的倒数第二行加入:plt.draw();plt.pause(0.001)</p><p><img src="/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/Users\64871\AppData\Roaming\Typora\typora-user-images\image-20220324082427863.png" alt="image-20220324082427863"></p>]]></content>
-      
-      
+      <tags>
+        <tag>深度学习</tag>
+        <tag>卷积</tag>
+        <tag>跟李沐学AI</tag>
+        <tag>答疑总结</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>hexo搭建博客方法及注意事项</title>
+    <url>/2022/03/12/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%96%B9%E6%B3%95%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>presentation</title>
+    <url>/2022/03/13/presentation/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2022/03/11/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<span id="more"></span>
+
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>test</title>
+    <url>/2022/03/11/test/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>闲散日记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多层感知机</title>
+    <url>/2022/03/24/%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/</url>
+    <content><![CDATA[<h2 id="torch-nn-Parameter"><a href="#torch-nn-Parameter" class="headerlink" title="torch.nn.Parameter:"></a>torch.nn.Parameter:</h2><p>是继承自torch.Tensor的子类，其主要作用是作为nn.Module中的可训练参数使用。它与torch.Tensor的区别就是nn.Parameter会自动被认为是module的可训练参数，即加入到parameter()这个迭代器中去；而module中非nn.Parameter()的普通tensor是不在parameter中的。<br>注意到，nn.Parameter的对象的requires_grad属性的默认值是True，即是可被训练的，这与torth.Tensor对象的默认值相反。<br>在nn.Module类中，pytorch也是使用nn.Parameter来对每一个module的参数进行初始化的。</p>
+<h2 id="对模型预加载参数："><a href="#对模型预加载参数：" class="headerlink" title="对模型预加载参数："></a>对模型预加载参数：</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">m</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">type</span>(m) == nn.Linear:</span><br><span class="line">        nn.init.normal_(m.weight, std=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line">net.apply(init_weights)</span><br></pre></td></tr></table></figure>
+
+]]></content>
       <categories>
-          
-          <category> 深度学习笔记 </category>
-          
-          <category> 工程能力提升 </category>
-          
+        <category>深度学习笔记</category>
+        <category>工程能力提升</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 跟李沐学AI </tag>
-            
-            <tag> 动手学深度学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>多层感知机</title>
-      <link href="/2022/03/24/%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/"/>
-      <url>/2022/03/24/%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/</url>
-      
-        <content type="html"><![CDATA[<h2 id="torch-nn-Parameter"><a href="#torch-nn-Parameter" class="headerlink" title="torch.nn.Parameter:"></a>torch.nn.Parameter:</h2><p>是继承自torch.Tensor的子类，其主要作用是作为nn.Module中的可训练参数使用。它与torch.Tensor的区别就是nn.Parameter会自动被认为是module的可训练参数，即加入到parameter()这个迭代器中去；而module中非nn.Parameter()的普通tensor是不在parameter中的。<br>注意到，nn.Parameter的对象的requires_grad属性的默认值是True，即是可被训练的，这与torth.Tensor对象的默认值相反。<br>在nn.Module类中，pytorch也是使用nn.Parameter来对每一个module的参数进行初始化的。</p><h2 id="对模型预加载参数："><a href="#对模型预加载参数：" class="headerlink" title="对模型预加载参数："></a>对模型预加载参数：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">m</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">type</span>(m) == nn.Linear:</span><br><span class="line">        nn.init.normal_(m.weight, std=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line">net.apply(init_weights)</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
+      <tags>
+        <tag>跟李沐学AI</tag>
+        <tag>动手学深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>学习</title>
+    <url>/2022/03/12/%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>深度学习</tag>
+        <tag>test</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>李沐都d2l库代码纠错</title>
+    <url>/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/</url>
+    <content><![CDATA[<h2 id="torch-py中的train-epoch-ch3函数"><a href="#torch-py中的train-epoch-ch3函数" class="headerlink" title="torch.py中的train_epoch_ch3函数:"></a>torch.py中的train_epoch_ch3函数:</h2><p>将273行和第275行的l后面加上mean()</p>
+<img src="/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/Users\64871\AppData\Roaming\Typora\typora-user-images\image-20220324082242952.png" alt="image-20220324082242952">
+
+
+
+<h2 id="torch-py中的class-Animator-动态绘图部分"><a href="#torch-py中的class-Animator-动态绘图部分" class="headerlink" title="torch.py中的class Animator(动态绘图部分):"></a>torch.py中的class Animator(动态绘图部分):</h2><p>在其add函数的倒数第二行加入:plt.draw();plt.pause(0.001)</p>
+<p><img src="/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/Users\64871\AppData\Roaming\Typora\typora-user-images\image-20220324082427863.png" alt="image-20220324082427863"></p>
+]]></content>
       <categories>
-          
-          <category> 深度学习笔记 </category>
-          
-          <category> 工程能力提升 </category>
-          
+        <category>深度学习笔记</category>
+        <category>工程能力提升</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 跟李沐学AI </tag>
-            
-            <tag> 动手学深度学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>线性回归</title>
-      <link href="/2022/03/23/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/"/>
-      <url>/2022/03/23/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/</url>
-      
-        <content type="html"><![CDATA[<h1 id="nn库的神经网络构建函数："><a href="#nn库的神经网络构建函数：" class="headerlink" title="nn库的神经网络构建函数："></a>nn库的神经网络构建函数：</h1><h2 id="优化器函数："><a href="#优化器函数：" class="headerlink" title="优化器函数："></a>优化器函数：</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trainer = torch.optim.SGD(net.parameters(), lr=<span class="number">0.03</span>)</span><br></pre></td></tr></table></figure><p>SGD为一个优化器函数，做的是均值损失，数学公式如下：<br>$$<br>(\mathbf{w},b) \leftarrow (\mathbf{w},b) - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_{(\mathbf{w},b)} l^{(i)}(\mathbf{w},b).<br>$$</p><p>$$<br>\begin{aligned} \mathbf{w} &amp;\leftarrow \mathbf{w} -   \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_{\mathbf{w}} l^{(i)}(\mathbf{w}, b) &#x3D; \mathbf{w} - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \mathbf{x}^{(i)} \left(\mathbf{w}^\top \mathbf{x}^{(i)} + b - y^{(i)}\right),\ b &amp;\leftarrow b -  \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_b l^{(i)}(\mathbf{w}, b)  &#x3D; b - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \left(\mathbf{w}^\top \mathbf{x}^{(i)} + b - y^{(i)}\right). \end{aligned}<br>$$</p><p>$\eta$是学习率,$B$是样本个数.</p><p>torch.optim.SGD的指定优化的参数是通过net.parameters()从设置的模型中获取.</p><h2 id="神经网络搭建函数"><a href="#神经网络搭建函数" class="headerlink" title="神经网络搭建函数:"></a>神经网络搭建函数:</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net = nn.Sequential(nn.Linear(<span class="number">2</span>, <span class="number">1</span>))</span><br></pre></td></tr></table></figure><p>Sequential内部可以根据自己需要放入任意层数的神经网络曾.</p><h2 id="神经网络层函数"><a href="#神经网络层函数" class="headerlink" title="神经网络层函数:"></a>神经网络层函数:</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nn.Linear(<span class="number">2</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure><p>2为输入的元素个数,1为输出的元素个数,linear为全连接层.</p><h2 id="数据加载函数"><a href="#数据加载函数" class="headerlink" title="数据加载函数:"></a>数据加载函数:</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data.DataLoader(dataset, batch_szie, shuffle=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure><h2 id="softmax计算公式"><a href="#softmax计算公式" class="headerlink" title="softmax计算公式:"></a>softmax计算公式:</h2><p>$$<br>\hat{\mathbf{y}} &#x3D; \mathrm{softmax}(\mathbf{o})\quad \text{其中}\quad \hat{y}_j &#x3D; \frac{\exp(o_j)}{\sum_k \exp(o_k)}<br>$$</p><h2 id="softmax使用的损失函数-交叉熵损失函数"><a href="#softmax使用的损失函数-交叉熵损失函数" class="headerlink" title="softmax使用的损失函数:交叉熵损失函数:"></a>softmax使用的损失函数:交叉熵损失函数:</h2><p>对于任何标签$\mathbf{y}$和模型预测$\hat{\mathbf{y}}$，损失函数为：<br>$$<br>l(\mathbf{y}, \hat{\mathbf{y}}) &#x3D; - \sum_{j&#x3D;1}^q y_j \log \hat{y}<em>j.<br>$$<br>进一步推导得到:<br>$$<br>\begin{aligned}<br>l(\mathbf{y}, \hat{\mathbf{y}}) &amp;&#x3D;  - \sum</em>{j&#x3D;1}^q y_j \log \frac{\exp(o_j)}{\sum_{k&#x3D;1}^q \exp(o_k)} \<br>&amp;&#x3D; \sum_{j&#x3D;1}^q y_j \log \sum_{k&#x3D;1}^q \exp(o_k) - \sum_{j&#x3D;1}^q y_j o_j\<br>&amp;&#x3D; \log \sum_{k&#x3D;1}^q \exp(o_k) - \sum_{j&#x3D;1}^q y_j o_j.<br>\end{aligned}<br>$$</p><p>$$<br>\partial_{o_j} l(\mathbf{y}, \hat{\mathbf{y}}) &#x3D; \frac{\exp(o_j)}{\sum_{k&#x3D;1}^q \exp(o_k)} - y_j &#x3D; \mathrm{softmax}(\mathbf{o})_j - y_j.<br>$$</p><h2 id="数据集读取函数和部分注意事项"><a href="#数据集读取函数和部分注意事项" class="headerlink" title="数据集读取函数和部分注意事项:"></a>数据集读取函数和部分注意事项:</h2><h3 id="transforms-ToTensor"><a href="#transforms-ToTensor" class="headerlink" title="transforms.ToTensor()"></a>transforms.ToTensor()</h3><ol><li>transforms.ToTensor() 将numpy的ndarray或PIL.Image读的图片转换成形状为(C,H, W)的Tensor格式，且&#x2F;255归一化到[0,1.0]之间</li><li>通道的具体顺序与cv2读的还是PIL.Image读的图片有关系:cv2:(B,G,R);PIL.Image:(R, G, B)</li></ol><h3 id="torchvision-datasets-FashionMNIST"><a href="#torchvision-datasets-FashionMNIST" class="headerlink" title="torchvision.datasets.FashionMNIST"></a>torchvision.datasets.FashionMNIST</h3><p><a href="%5B(35%E6%9D%A1%E6%B6%88%E6%81%AF">具体使用方法查看该连接</a> 「学习笔记」torchvision.datasets.MNIST 参数解读&#x2F;中文使用手册_江南蜡笔小新的博客-CSDN博客_torchvision.datasets.mnist](<a href="https://blog.csdn.net/ftimes/article/details/105202039?ops_request_misc=%7B%22request_id%22:%22164803883416780357269449%22,%22scm%22:%2220140713.130102334..%22%7D&amp;request_id=164803883416780357269449&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-4-105202039.142%5Ev3%5Epc_search_result_control_group,143%5Ev4%5Econtrol&amp;utm_term=torchvision.datasets.FashionMNIST&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/ftimes/article/details/105202039?ops_request_misc=%7B%22request%5Fid%22%3A%22164803883416780357269449%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&amp;request_id=164803883416780357269449&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-4-105202039.142^v3^pc_search_result_control_group,143^v4^control&amp;utm_term=torchvision.datasets.FashionMNIST&amp;spm=1018.2226.3001.4187</a>))</p>]]></content>
-      
-      
+      <tags>
+        <tag>跟李沐学AI</tag>
+        <tag>动手学深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>第一presentation</title>
+    <url>/2022/03/13/%E7%AC%AC%E4%B8%80presentation/</url>
+    <content><![CDATA[ <meta name="referrer" content="no-referrer">
+
+<img src="/2022/03/13/%E7%AC%AC%E4%B8%80presentation/20210711155449249.png" class width="111">
+
+<p><img src="/./%E7%AC%AC%E4%B8%80presentation/20210711155449249.png" alt="20210711155449249"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>深度学习计算</title>
+    <url>/2022/03/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h2 id="F-Relu和nn-Relu的区别："><a href="#F-Relu和nn-Relu的区别：" class="headerlink" title="F.Relu和nn.Relu的区别："></a>F.Relu和nn.Relu的区别：</h2><p>F.relu是作为一个函数去计算relu，使用方法为：F.relu(X)</p>
+<p>nn.Relu是作为一个层结构，必须添加到nn.Module容器内才能使用。</p>
+<p>从嵌套块中收集参数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">block1</span>():</span><br><span class="line">    <span class="keyword">return</span> nn.Sequential(nn.Linear(<span class="number">4</span>, <span class="number">8</span>), nn.ReLU(),</span><br><span class="line">                         nn.Linear(<span class="number">8</span>, <span class="number">4</span>), nn.ReLU())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">block2</span>():</span><br><span class="line">    net = nn.Sequential()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        <span class="comment"># 在这里嵌套</span></span><br><span class="line">        net.add_module(<span class="string">f&#x27;block <span class="subst">&#123;i&#125;</span>&#x27;</span>, block1())</span><br><span class="line">    <span class="keyword">return</span> net</span><br><span class="line"></span><br><span class="line">rgnet = nn.Sequential(block2(), nn.Linear(<span class="number">4</span>, <span class="number">1</span>))</span><br><span class="line">rgnet(X)</span><br><span class="line"><span class="built_in">print</span>(rgnet)</span><br></pre></td></tr></table></figure>
+
+]]></content>
       <categories>
-          
-          <category> 深度学习笔记 </category>
-          
-          <category> 工程能力提升 </category>
-          
+        <category>深度学习笔记</category>
+        <category>工程能力提升</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 跟李沐学AI </tag>
-            
-            <tag> 动手学深度学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>6_2图像卷积疑问及解答</title>
-      <link href="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/"/>
-      <url>/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/</url>
-      
-        <content type="html"><![CDATA[<h2 id="问题1：卷积是什么？"><a href="#问题1：卷积是什么？" class="headerlink" title="问题1：卷积是什么？"></a>问题1：卷积是什么？</h2><h2 id="解答1：小明吃饭"><a href="#解答1：小明吃饭" class="headerlink" title="解答1：小明吃饭"></a>解答1：小明吃饭</h2><p>举例说明，有个小明一天到晚在吃东西，时间和他吃下去的东西的函数图像如下图所示：</p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314151338739.png" class title="进食函数"><p>他消化的速率如下图所示：</p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314151455298.png" class title="消化比例函数"><p>卷积的公式为：<br>$$<br>\int_{+\infty}^{-\infty}{f(Z)g(X-Z)dZ}<br>$$<br>用f函数表示进食,g函数表示消化,带入到卷积公式之中.注意,g函数表示的是消化后剩余食物所占的比例.</p><p>这里要表现的东西其实用一根线将f函数和g函数联系了起来.</p><p><strong>一个系统输入不稳定(对应f函数),但是输出稳定(对应g函数),可以用卷积来求系统存量.</strong></p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314154543887.png" class title="卷积计算本质"><p>讲其对应到可视化图像上,其实就是讲g函数翻转了一下和f函数对应相乘,因为翻转了,所以对应叫做卷积.</p><h2 id="问题2-如何将卷积公式与计算机图像处理对应起来"><a href="#问题2-如何将卷积公式与计算机图像处理对应起来" class="headerlink" title="问题2:如何将卷积公式与计算机图像处理对应起来"></a>问题2:如何将卷积公式与计算机图像处理对应起来</h2><h2 id="解答2"><a href="#解答2" class="headerlink" title="解答2:"></a>解答2:</h2><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314155110999.png" class title="图片卷积计算"><p>上图为计算机对图片进行卷积处理的解释,和前面的卷积公式有一对应结构:<strong>先相乘再相加</strong>,然后得到一个新的像素值.</p><p>但是这么做会导致图像少一圈像素,那么就在原图像的外围加一圈0的像素点,如下图所示:这样就能得到同样大小的图片</p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314155317812.png" class title="保持原本图片大小的卷积操作"><p>图像对应卷积公式中的f函数,卷积核对应g函数,这里与吃东西不同之处在于这里是一个二维的问题.</p><h2 id="问题3-如何理解卷积本质"><a href="#问题3-如何理解卷积本质" class="headerlink" title="问题3:如何理解卷积本质?"></a>问题3:如何理解卷积本质?</h2><h2 id="解答3"><a href="#解答3" class="headerlink" title="解答3:"></a>解答3:</h2><p>在一个时间段上,会随机的发生很多件事情,这些事情是无法预测的随机的输出,同时每一件事情都可能会对后面的事情产生一定的影响,这个影响会随着时间的变化而变化,其函数对应g函数.注意,这里的<strong>g函数可以随意变化</strong>,<strong>横坐标不一定时间</strong>,函数图线不一定是递减,</p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314160000048.png" class title="蝴蝶对龙卷风的影响"><p>举例说明:在某一个时刻,发生了一件事,这件事会受到之前发生的很多事情的影响,这个影响还会随着时间的改变而改变,这个改变的规律的函数就是g函数.</p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314160208422.png" class title="平滑卷积核"><p>这里g函数所做的操作就是求了一个平均,这里g函数是一个3 * 3的卷积核,就是**表达的是一个像素点周围的一圈像素点对其产生的影响.**还会有5 * 5等多种大小规模的卷积核.</p><p><strong>卷积核的规模大小对应的是能够影响中心点的周边的点的范围,卷积核每一个小格里的函数对应的是周边点对中心点影响的g函数.</strong></p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314160911035.png" class title="卷积计算"><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314161343403.png" class title="卷积计算"><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314161439482.png" class title="卷积计算"><p>注意,这里需要将相应的矩阵进行180°翻转才能转化成一一对应的关系.</p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314161555941.png" class title="卷积核本质"><p>这就说明g函数不等于卷积核,需要讲g函数的矩阵顺时针翻转180°才是卷积核.卷积核可以直接扣在图像上进行相乘再相加.</p><ol><li>过去对现在的影响就相当于周围像素点对中间像素点的影响;</li><li>g函数规定了如何影响;</li></ol><h2 id="问题4-卷积神经网络"><a href="#问题4-卷积神经网络" class="headerlink" title="问题4:卷积神经网络"></a>问题4:卷积神经网络</h2><p>卷积神经网络第一步:将图像的局部特征提取出来,讲这些局部特征交给神经网络.</p><p>如何提取局部特征?就是对图像进行卷积操作.这里与之前理解的卷积的操作的结果有不同之处,该如何理解?</p><h2 id="解答4"><a href="#解答4" class="headerlink" title="解答4:"></a>解答4:</h2><p>因为卷积核有很多种,不止有平滑卷积核.</p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314162235332.png" class title="卷积用于特征提取"><p>上面的两个卷积核,第一个卷积核讲垂直方向的边界挑选了出来(垂直边界过滤器),下面的将水平方向的边界挑选了出来(水平边界过滤器).</p><p>也就是说,只要卷积核应用合理,就能将图片中特定的特征提取出来,别的东西过滤掉.</p><img src="/2022/03/14/6-2%E5%9B%BE%E5%83%8F%E5%8D%B7%E7%A7%AF%E7%96%91%E9%97%AE%E5%8F%8A%E8%A7%A3%E7%AD%94/image-20220314162633975.png" class title="多层卷积进行特征提取"><p>上图所示三个卷积核分别就是提取三个唯独的特征信息.</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结:"></a>总结:</h2><ol><li>不稳定输入,稳定输出,求系统存量;</li><li>周围像素点如何对中心像素点产生影响;</li><li>作为过滤器,提取图片特征信息.,也就是指中心像素点如何试探周围的像素点,如何筛选图像特征.</li></ol><p><a href="https://www.bilibili.com/video/BV1VV411478E?from=search&seid=1725700777641154181">参考来源:B站up主王木头学科学:从“卷积”、到“图像卷积操作”、再到“卷积神经网络”，“卷积”意义的3次改变</a></p><p><a href="https://www.bilibili.com/video/BV1L64y1m7Nh?spm_id_from=333.999.0.0">参考来源:B站up主跟李沐学AI:19 卷积层【动手学深度学习v2】</a></p>]]></content>
-      
-      
+      <tags>
+        <tag>跟李沐学AI</tag>
+        <tag>动手学深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>简历</title>
+    <url>/2022/03/12/%E7%AE%80%E5%8E%86/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>个人简历</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>线性回归</title>
+    <url>/2022/03/23/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/</url>
+    <content><![CDATA[<h1 id="nn库的神经网络构建函数："><a href="#nn库的神经网络构建函数：" class="headerlink" title="nn库的神经网络构建函数："></a>nn库的神经网络构建函数：</h1><h2 id="优化器函数："><a href="#优化器函数：" class="headerlink" title="优化器函数："></a>优化器函数：</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">trainer = torch.optim.SGD(net.parameters(), lr=<span class="number">0.03</span>)</span><br></pre></td></tr></table></figure>
+
+<p>SGD为一个优化器函数，做的是均值损失，数学公式如下：<br>$$<br>(\mathbf{w},b) \leftarrow (\mathbf{w},b) - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_{(\mathbf{w},b)} l^{(i)}(\mathbf{w},b).<br>$$</p>
+<p>$$<br>\begin{aligned} \mathbf{w} &amp;\leftarrow \mathbf{w} -   \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_{\mathbf{w}} l^{(i)}(\mathbf{w}, b) &#x3D; \mathbf{w} - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \mathbf{x}^{(i)} \left(\mathbf{w}^\top \mathbf{x}^{(i)} + b - y^{(i)}\right),\ b &amp;\leftarrow b -  \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \partial_b l^{(i)}(\mathbf{w}, b)  &#x3D; b - \frac{\eta}{|\mathcal{B}|} \sum_{i \in \mathcal{B}} \left(\mathbf{w}^\top \mathbf{x}^{(i)} + b - y^{(i)}\right). \end{aligned}<br>$$</p>
+<p>$\eta$是学习率,$B$是样本个数.</p>
+<p>torch.optim.SGD的指定优化的参数是通过net.parameters()从设置的模型中获取.</p>
+<h2 id="神经网络搭建函数"><a href="#神经网络搭建函数" class="headerlink" title="神经网络搭建函数:"></a>神经网络搭建函数:</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">net = nn.Sequential(nn.Linear(<span class="number">2</span>, <span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+
+<p>Sequential内部可以根据自己需要放入任意层数的神经网络曾.</p>
+<h2 id="神经网络层函数"><a href="#神经网络层函数" class="headerlink" title="神经网络层函数:"></a>神经网络层函数:</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">nn.Linear(<span class="number">2</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>2为输入的元素个数,1为输出的元素个数,linear为全连接层.</p>
+<h2 id="数据加载函数"><a href="#数据加载函数" class="headerlink" title="数据加载函数:"></a>数据加载函数:</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data.DataLoader(dataset, batch_szie, shuffle=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="softmax计算公式"><a href="#softmax计算公式" class="headerlink" title="softmax计算公式:"></a>softmax计算公式:</h2><p>$$<br>\hat{\mathbf{y}} &#x3D; \mathrm{softmax}(\mathbf{o})\quad \text{其中}\quad \hat{y}_j &#x3D; \frac{\exp(o_j)}{\sum_k \exp(o_k)}<br>$$</p>
+<h2 id="softmax使用的损失函数-交叉熵损失函数"><a href="#softmax使用的损失函数-交叉熵损失函数" class="headerlink" title="softmax使用的损失函数:交叉熵损失函数:"></a>softmax使用的损失函数:交叉熵损失函数:</h2><p>对于任何标签$\mathbf{y}$和模型预测$\hat{\mathbf{y}}$，损失函数为：<br>$$<br>l(\mathbf{y}, \hat{\mathbf{y}}) &#x3D; - \sum_{j&#x3D;1}^q y_j \log \hat{y}<em>j.<br>$$<br>进一步推导得到:<br>$$<br>\begin{aligned}<br>l(\mathbf{y}, \hat{\mathbf{y}}) &amp;&#x3D;  - \sum</em>{j&#x3D;1}^q y_j \log \frac{\exp(o_j)}{\sum_{k&#x3D;1}^q \exp(o_k)} \<br>&amp;&#x3D; \sum_{j&#x3D;1}^q y_j \log \sum_{k&#x3D;1}^q \exp(o_k) - \sum_{j&#x3D;1}^q y_j o_j\<br>&amp;&#x3D; \log \sum_{k&#x3D;1}^q \exp(o_k) - \sum_{j&#x3D;1}^q y_j o_j.<br>\end{aligned}<br>$$</p>
+<p>$$<br>\partial_{o_j} l(\mathbf{y}, \hat{\mathbf{y}}) &#x3D; \frac{\exp(o_j)}{\sum_{k&#x3D;1}^q \exp(o_k)} - y_j &#x3D; \mathrm{softmax}(\mathbf{o})_j - y_j.<br>$$</p>
+<h2 id="数据集读取函数和部分注意事项"><a href="#数据集读取函数和部分注意事项" class="headerlink" title="数据集读取函数和部分注意事项:"></a>数据集读取函数和部分注意事项:</h2><h3 id="transforms-ToTensor"><a href="#transforms-ToTensor" class="headerlink" title="transforms.ToTensor()"></a>transforms.ToTensor()</h3><ol>
+<li>transforms.ToTensor() 将numpy的ndarray或PIL.Image读的图片转换成形状为(C,H, W)的Tensor格式，且&#x2F;255归一化到[0,1.0]之间</li>
+<li>通道的具体顺序与cv2读的还是PIL.Image读的图片有关系:cv2:(B,G,R);PIL.Image:(R, G, B)</li>
+</ol>
+<h3 id="torchvision-datasets-FashionMNIST"><a href="#torchvision-datasets-FashionMNIST" class="headerlink" title="torchvision.datasets.FashionMNIST"></a>torchvision.datasets.FashionMNIST</h3><p><a href="%5B(35%E6%9D%A1%E6%B6%88%E6%81%AF">具体使用方法查看该连接</a> 「学习笔记」torchvision.datasets.MNIST 参数解读&#x2F;中文使用手册_江南蜡笔小新的博客-CSDN博客_torchvision.datasets.mnist](<a href="https://blog.csdn.net/ftimes/article/details/105202039?ops_request_misc=%7B%22request_id%22:%22164803883416780357269449%22,%22scm%22:%2220140713.130102334..%22%7D&amp;request_id=164803883416780357269449&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-4-105202039.142%5Ev3%5Epc_search_result_control_group,143%5Ev4%5Econtrol&amp;utm_term=torchvision.datasets.FashionMNIST&amp;spm=1018.2226.3001.4187">https://blog.csdn.net/ftimes/article/details/105202039?ops_request_misc=%7B%22request%5Fid%22%3A%22164803883416780357269449%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&amp;request_id=164803883416780357269449&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-4-105202039.142^v3^pc_search_result_control_group,143^v4^control&amp;utm_term=torchvision.datasets.FashionMNIST&amp;spm=1018.2226.3001.4187</a>))</p>
+]]></content>
       <categories>
-          
-          <category> 深度学习笔记 </category>
-          
-          <category> 关键知识点答疑总结 </category>
-          
+        <category>深度学习笔记</category>
+        <category>工程能力提升</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> 深度学习 </tag>
-            
-            <tag> 卷积 </tag>
-            
-            <tag> 跟李沐学AI </tag>
-            
-            <tag> 答疑总结 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>解决hexo3.0以上版本无法直接显示插入的图片的问题</title>
-      <link href="/2022/03/13/%E8%A7%A3%E5%86%B3hexo3-0%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E6%97%A0%E6%B3%95%E7%9B%B4%E6%8E%A5%E6%98%BE%E7%A4%BA%E6%8F%92%E5%85%A5%E7%9A%84%E5%9B%BE%E7%89%87%E7%9A%84%E9%97%AE%E9%A2%98/"/>
-      <url>/2022/03/13/%E8%A7%A3%E5%86%B3hexo3-0%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E6%97%A0%E6%B3%95%E7%9B%B4%E6%8E%A5%E6%98%BE%E7%A4%BA%E6%8F%92%E5%85%A5%E7%9A%84%E5%9B%BE%E7%89%87%E7%9A%84%E9%97%AE%E9%A2%98/</url>
-      
-        <content type="html"><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>hexo选择3.0以上版本，通过常规md文件的编写方式无法在网页中显示图片。</p><h1 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h1><p>在博客根目录下用命令行：<strong>hexo3.0及以上版本一定要用该指令进行安装！！！</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install https://github.com/7ym0n/hexo-asset-image --save</span><br></pre></td></tr></table></figure><p>该指令是指安装<strong>修改后</strong>的hexo-asset-image，可适用于hexo3.0及以上版本。</p><p>网上的教程多数是使用如下命令进行安装，<strong>在hexo3.0版本下是错误的！！！</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install https://github.com/hexo-asset-image --save  # hexo3.0以上版本不要用这条语句</span><br></pre></td></tr></table></figure><p>然后在博客根目录下的_config.yml文件中将“post_asset_folder:”设置为”true“，这样在通过指令hexo new “文章标题”时，不仅会创建一个md文件，还会创建一个和md文件同名的文件夹。将md文件中将要用到的图片存储在这个文件夹下，在需要使用的时候在md文件中通过：</p><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% asset<span class="emphasis">_img sky2.jpg This is an test image %&#125;</span></span><br></pre></td></tr></table></figure><p>来插入图片。其中sky2.jpg就是你要引用的图片，我这里就是sky2.jpg，后面的This is an test image是图片描述，可以自己修改。</p><h1 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h1><ol><li>一定要事先搞清楚自己hexo的版本，否则装上了也不一定是对的。</li><li>使用指令安装asset的时候可能会非常慢，可以尝试链接vpn或者使用cnmp指令进行安装，或者耐心等一等，网上方法太多了，没啥用。</li></ol>]]></content>
-      
-      
+      <tags>
+        <tag>跟李沐学AI</tag>
+        <tag>动手学深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>解决hexo3.0以上版本无法直接显示插入的图片的问题</title>
+    <url>/2022/03/13/%E8%A7%A3%E5%86%B3hexo3-0%E4%BB%A5%E4%B8%8A%E7%89%88%E6%9C%AC%E6%97%A0%E6%B3%95%E7%9B%B4%E6%8E%A5%E6%98%BE%E7%A4%BA%E6%8F%92%E5%85%A5%E7%9A%84%E5%9B%BE%E7%89%87%E7%9A%84%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>hexo选择3.0以上版本，通过常规md文件的编写方式无法在网页中显示图片。</p>
+<h1 id="解决方法："><a href="#解决方法：" class="headerlink" title="解决方法："></a>解决方法：</h1><p>在博客根目录下用命令行：<strong>hexo3.0及以上版本一定要用该指令进行安装！！！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/7ym0n/hexo-asset-image --save</span><br></pre></td></tr></table></figure>
+
+<p>该指令是指安装<strong>修改后</strong>的hexo-asset-image，可适用于hexo3.0及以上版本。</p>
+<p>网上的教程多数是使用如下命令进行安装，<strong>在hexo3.0版本下是错误的！！！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">npm install https://github.com/hexo-asset-image --save  # hexo3.0以上版本不要用这条语句</span><br></pre></td></tr></table></figure>
+
+<p>然后在博客根目录下的_config.yml文件中将“post_asset_folder:”设置为”true“，这样在通过指令hexo new “文章标题”时，不仅会创建一个md文件，还会创建一个和md文件同名的文件夹。将md文件中将要用到的图片存储在这个文件夹下，在需要使用的时候在md文件中通过：</p>
+<figure class="highlight markdown"><table><tr><td class="code"><pre><span class="line">&#123;% asset<span class="emphasis">_img sky2.jpg This is an test image %&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>来插入图片。其中sky2.jpg就是你要引用的图片，我这里就是sky2.jpg，后面的This is an test image是图片描述，可以自己修改。</p>
+<h1 id="注意事项："><a href="#注意事项：" class="headerlink" title="注意事项："></a>注意事项：</h1><ol>
+<li>一定要事先搞清楚自己hexo的版本，否则装上了也不一定是对的。</li>
+<li>使用指令安装asset的时候可能会非常慢，可以尝试链接vpn或者使用cnmp指令进行安装，或者耐心等一等，网上方法太多了，没啥用。</li>
+</ol>
+]]></content>
       <categories>
-          
-          <category> 博客搭建 </category>
-          
+        <category>博客搭建</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> hexo </tag>
-            
-            <tag> 博客搭建 </tag>
-            
-            <tag> 问题解决 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>第一presentation</title>
-      <link href="/2022/03/13/%E7%AC%AC%E4%B8%80presentation/"/>
-      <url>/2022/03/13/%E7%AC%AC%E4%B8%80presentation/</url>
-      
-        <content type="html"><![CDATA[ <meta name="referrer" content="no-referrer"><img src="/2022/03/13/%E7%AC%AC%E4%B8%80presentation/20210711155449249.png" class width="111"><p><img src="/./%E7%AC%AC%E4%B8%80presentation/20210711155449249.png" alt="20210711155449249"></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>presentation</title>
-      <link href="/2022/03/13/presentation/"/>
-      <url>/2022/03/13/presentation/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>hexo搭建博客方法及注意事项</title>
-      <link href="/2022/03/12/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%96%B9%E6%B3%95%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/"/>
-      <url>/2022/03/12/hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%E6%96%B9%E6%B3%95%E5%8F%8A%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>简历</title>
-      <link href="/2022/03/12/%E7%AE%80%E5%8E%86/"/>
-      <url>/2022/03/12/%E7%AE%80%E5%8E%86/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 个人简历 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>学习</title>
-      <link href="/2022/03/12/%E5%AD%A6%E4%B9%A0/"/>
-      <url>/2022/03/12/%E5%AD%A6%E4%B9%A0/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 深度学习 </tag>
-            
-            <tag> test </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>test</title>
-      <link href="/2022/03/11/test/"/>
-      <url>/2022/03/11/test/</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-      
-      
-        <tags>
-            
-            <tag> 闲散日记 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="/2022/03/11/hello-world/"/>
-      <url>/2022/03/11/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><span id="more"></span><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-      
-      
-      
-    </entry>
-    
-    
-  
-  
+      <tags>
+        <tag>hexo</tag>
+        <tag>博客搭建</tag>
+        <tag>问题解决</tag>
+      </tags>
+  </entry>
 </search>
