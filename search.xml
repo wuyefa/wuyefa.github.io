@@ -21,6 +21,60 @@
 ]]></content>
   </entry>
   <entry>
+    <title>深度学习计算</title>
+    <url>/2022/03/24/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h2 id="F-Relu和nn-Relu的区别："><a href="#F-Relu和nn-Relu的区别：" class="headerlink" title="F.Relu和nn.Relu的区别："></a>F.Relu和nn.Relu的区别：</h2><p>F.relu是作为一个函数去计算relu，使用方法为：F.relu(X)</p>
+<p>nn.Relu是作为一个层结构，必须添加到nn.Module容器内才能使用。</p>
+<p>从嵌套块中收集参数：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">block1</span>():</span><br><span class="line">    <span class="keyword">return</span> nn.Sequential(nn.Linear(<span class="number">4</span>, <span class="number">8</span>), nn.ReLU(),</span><br><span class="line">                         nn.Linear(<span class="number">8</span>, <span class="number">4</span>), nn.ReLU())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">block2</span>():</span><br><span class="line">    net = nn.Sequential()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        <span class="comment"># 在这里嵌套</span></span><br><span class="line">        net.add_module(<span class="string">f&#x27;block <span class="subst">&#123;i&#125;</span>&#x27;</span>, block1())</span><br><span class="line">    <span class="keyword">return</span> net</span><br><span class="line"></span><br><span class="line">rgnet = nn.Sequential(block2(), nn.Linear(<span class="number">4</span>, <span class="number">1</span>))</span><br><span class="line">rgnet(X)</span><br><span class="line"><span class="built_in">print</span>(rgnet)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>深度学习笔记</category>
+        <category>工程能力提升</category>
+      </categories>
+      <tags>
+        <tag>跟李沐学AI</tag>
+        <tag>动手学深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>李沐都d2l库代码纠错</title>
+    <url>/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/</url>
+    <content><![CDATA[<h2 id="torch-py中的train-epoch-ch3函数"><a href="#torch-py中的train-epoch-ch3函数" class="headerlink" title="torch.py中的train_epoch_ch3函数:"></a>torch.py中的train_epoch_ch3函数:</h2><p>将273行和第275行的l后面加上mean()</p>
+<img src="/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/Users\64871\AppData\Roaming\Typora\typora-user-images\image-20220324082242952.png" alt="image-20220324082242952">
+
+
+
+<h2 id="torch-py中的class-Animator-动态绘图部分"><a href="#torch-py中的class-Animator-动态绘图部分" class="headerlink" title="torch.py中的class Animator(动态绘图部分):"></a>torch.py中的class Animator(动态绘图部分):</h2><p>在其add函数的倒数第二行加入:plt.draw();plt.pause(0.001)</p>
+<p><img src="/2022/03/24/%E6%9D%8E%E6%B2%90%E9%83%BDd2l%E5%BA%93%E4%BB%A3%E7%A0%81%E7%BA%A0%E9%94%99/Users\64871\AppData\Roaming\Typora\typora-user-images\image-20220324082427863.png" alt="image-20220324082427863"></p>
+]]></content>
+      <categories>
+        <category>深度学习笔记</category>
+        <category>工程能力提升</category>
+      </categories>
+      <tags>
+        <tag>跟李沐学AI</tag>
+        <tag>动手学深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多层感知机</title>
+    <url>/2022/03/24/%E5%A4%9A%E5%B1%82%E6%84%9F%E7%9F%A5%E6%9C%BA/</url>
+    <content><![CDATA[<h2 id="torch-nn-Parameter"><a href="#torch-nn-Parameter" class="headerlink" title="torch.nn.Parameter:"></a>torch.nn.Parameter:</h2><p>是继承自torch.Tensor的子类，其主要作用是作为nn.Module中的可训练参数使用。它与torch.Tensor的区别就是nn.Parameter会自动被认为是module的可训练参数，即加入到parameter()这个迭代器中去；而module中非nn.Parameter()的普通tensor是不在parameter中的。<br>注意到，nn.Parameter的对象的requires_grad属性的默认值是True，即是可被训练的，这与torth.Tensor对象的默认值相反。<br>在nn.Module类中，pytorch也是使用nn.Parameter来对每一个module的参数进行初始化的。</p>
+<h2 id="对模型预加载参数："><a href="#对模型预加载参数：" class="headerlink" title="对模型预加载参数："></a>对模型预加载参数：</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">init_weights</span>(<span class="params">m</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">type</span>(m) == nn.Linear:</span><br><span class="line">        nn.init.normal_(m.weight, std=<span class="number">0.01</span>)</span><br><span class="line"></span><br><span class="line">net.apply(init_weights)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>深度学习笔记</category>
+        <category>工程能力提升</category>
+      </categories>
+      <tags>
+        <tag>跟李沐学AI</tag>
+        <tag>动手学深度学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>线性回归</title>
     <url>/2022/03/23/%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/</url>
     <content><![CDATA[<h1 id="nn库的神经网络构建函数："><a href="#nn库的神经网络构建函数：" class="headerlink" title="nn库的神经网络构建函数："></a>nn库的神经网络构建函数：</h1><h2 id="优化器函数："><a href="#优化器函数：" class="headerlink" title="优化器函数："></a>优化器函数：</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">trainer = torch.optim.SGD(net.parameters(), lr=<span class="number">0.03</span>)</span><br></pre></td></tr></table></figure>
